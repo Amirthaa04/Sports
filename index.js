@@ -2,18 +2,18 @@ const mongoose = require('mongoose')
 const express = require('express')
 const Sports = require('./Schema.js')
 const bodyParser = require('body-parser')
-// const cors = require('cors')
+const cors = require('cors')
 
 const app = express()
 app.use(bodyParser.json())
-// app.use(cors())
+app.use(cors())
 
 
 async function connectToDb() {
     try {
-        await mongoose.connect('mongodb+srv://Amirtha:Amirthaa@cluster0.yjyqtgf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+        await mongoose.connect('mongodb+srv://Amirtha:Amirthaa@cluster0.yjyqtgf.mongodb.net/Sports?retryWrites=true&w=majority&appName=Cluster0')
         console.log('DB Connection established')
-        const port = process.env.PORT || 8002 // in cloud service take any port no which is avaliable(process.env.PORT) , in local machine it will take 8002 as port number
+        const port = process.env.PORT || 8003 // in cloud service take any port no which is avaliable(process.env.PORT) , in local machine it will take 8002 as port number
         app.listen(port, function () {
             console.log(`Listening on port ${port} `)
         })
