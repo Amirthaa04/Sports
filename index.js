@@ -54,7 +54,7 @@ app.post('/add-ques', async function(request, response) {
     try {
         const { category } = request.query;
         // Assuming you have a schema named 'Question' for storing questions
-        const questions = await Question.find({ category }); // Find questions based on difficulty
+        const questions = await Sports.find({ category }); // Find questions based on difficulty
         response.status(200).json(questions);
     } catch (error) {
         console.error('Error fetching questions:', error);
