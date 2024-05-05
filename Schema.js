@@ -1,10 +1,7 @@
 const mongoose = require('mongoose');
 
 const SportsSchema = new mongoose.Schema({
-  // topic:{
-  //   type:String,
-  //   required:true
-  // },
+
   topic: {
     type: String,
     required: true

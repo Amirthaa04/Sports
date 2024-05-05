@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const express = require('express')
 const Sports = require('./Schema.js')
+const Register=require('./Schema2.js')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 
@@ -25,6 +26,27 @@ async function connectToDb() {
 
 connectToDb()
 
+app.post('/register', async function(request, response) {
+  try {
+    const newUser = await Register.create({
+      email: request.body.email,
+      username: request.body.username,
+      password: request.body.password
+    })
+    response.status(201).json({
+      status: 'success',
+      message: 'User created successfully',
+      user: newUser
+    })
+  } catch (error) {
+    console.error('Error creating user:', error)
+    response.status(500).json({
+      status: 'failure',
+      message: 'Failed to create user',
+      error: error.message
+    })
+  }
+})
 
 app.post('/add-ques', async function(request, response) {
     try {
