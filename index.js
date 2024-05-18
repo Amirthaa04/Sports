@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+// const bcrypt = require('bcrypt');
+// const jwt = require('jsonwebtoken');
 const Cart = require('./Schema3.js'); // Assuming you saved the Cart schema in CartSchema.js
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -12,7 +12,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const JWT_SECRET = process.env.JWT_SECRET;
+// const JWT_SECRET = process.env.JWT_SECRET;
 
 // Database connection
 async function connectToDb() {
@@ -31,84 +31,84 @@ async function connectToDb() {
 
 connectToDb();
 
-// app.post('/register', async function(request, response) {
-//     try {
-//         const newUser = await Register.create({
-//             email: request.body.email,
-//             username: request.body.username,
-//             password: request.body.password
-//         });
-//         response.status(201).json({
-//             status: 'success',
-//             message: 'User created successfully',
-//             user: newUser
-//         });
-//     } catch (error) {
-//         console.error('Error creating user:', error);
-//         response.status(500).json({
-//             status: 'failure',
-//             message: 'Failed to create user',
-//             error: error.message
-//         });
-//     }
-// });
-
 app.post('/register', async function(request, response) {
     try {
-      const { email, username, password } = request.body;
-      const newUser = await Register.create({ email, username, password });
-      response.status(201).json({
-        status: 'success',
-        message: 'User created successfully',
-        user: newUser
-      });
-    } catch (error) {
-      console.error('Error creating user:', error);
-      response.status(500).json({
-        status: 'failure',
-        message: 'Failed to create user',
-        error: error.message
-      });
-    }
-  });
-  
-  // Login route
-  app.post('/login', async function(request, response) {
-    try {
-      const { email, password } = request.body;
-      const user = await Register.findOne({ email });
-  
-      if (!user) {
-        return response.status(401).json({
-          status: 'failure',
-          message: 'Invalid email or password'
+        const newUser = await Register.create({
+            email: request.body.email,
+            username: request.body.username,
+            password: request.body.password
         });
-      }
-  
-      const isMatch = await user.comparePassword(password);
-      if (!isMatch) {
-        return response.status(401).json({
-          status: 'failure',
-          message: 'Invalid email or password'
+        response.status(201).json({
+            status: 'success',
+            message: 'User created successfully',
+            user: newUser
         });
-      }
-  
-      const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
-  
-      response.status(200).json({
-        status: 'success',
-        message: 'Login successful',
-        token
-      });
     } catch (error) {
-      console.error('Error logging in:', error);
-      response.status(500).json({
-        status: 'failure',
-        message: 'Failed to login',
-        error: error.message
-      });
+        console.error('Error creating user:', error);
+        response.status(500).json({
+            status: 'failure',
+            message: 'Failed to create user',
+            error: error.message
+        });
     }
-  });
+});
+
+// app.post('/register', async function(request, response) {
+//     try {
+//       const { email, username, password } = request.body;
+//       const newUser = await Register.create({ email, username, password });
+//       response.status(201).json({
+//         status: 'success',
+//         message: 'User created successfully',
+//         user: newUser
+//       });
+//     } catch (error) {
+//       console.error('Error creating user:', error);
+//       response.status(500).json({
+//         status: 'failure',
+//         message: 'Failed to create user',
+//         error: error.message
+//       });
+//     }
+//   });
+  
+//   // Login route
+//   app.post('/login', async function(request, response) {
+//     try {
+//       const { email, password } = request.body;
+//       const user = await Register.findOne({ email });
+  
+//       if (!user) {
+//         return response.status(401).json({
+//           status: 'failure',
+//           message: 'Invalid email or password'
+//         });
+//       }
+  
+//       const isMatch = await user.comparePassword(password);
+//       if (!isMatch) {
+//         return response.status(401).json({
+//           status: 'failure',
+//           message: 'Invalid email or password'
+//         });
+//       }
+  
+//       const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
+  
+//       response.status(200).json({
+//         status: 'success',
+//         message: 'Login successful',
+//         token
+//       });
+//     } catch (error) {
+//       console.error('Error logging in:', error);
+//       response.status(500).json({
+//         status: 'failure',
+//         message: 'Failed to login',
+//         error: error.message
+//       });
+//     }
+//   });
 
 app.post('/add-ques', async function(request, response) {
     try {
