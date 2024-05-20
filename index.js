@@ -118,73 +118,109 @@ app.get('/req-questions', async function(request, response) {
 });
 
 // Add to cart route
+// app.post('/add-to-cart', async function(request, response) {
+//     try {
+//         const { userId, productId } = request.body;
+
+//         let cart = await Cart.findOne({ userId });
+
+//         if (cart) {
+//             // Cart exists for the user
+//             const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
+
+//             if (itemIndex > -1) {
+//                 // Product exists in the cart, update the quantity
+//                 cart.items[itemIndex].quantity += 1;
+//             } else {
+//                 // Product does not exist in the cart, add new item
+//                 cart.items.push({ productId, quantity: 1 });
+//             }
+//         } else {
+//             // No cart for the user, create a new cart
+//             cart = new Cart({
+//                 userId,
+//                 items: [{ productId, quantity: 1 }]
+//             });
+//         }
+
+//         await cart.save();
+//         response.status(200).json({
+//             status: 'success',
+//             message: 'Item added to cart successfully',
+//             cart
+//         });
+//     } catch (error) {
+//         console.error('Error adding to cart:', error);
+//         response.status(500).json({
+//             status: 'failure',
+//             message: 'Failed to add item to cart',
+//             error: error.message
+//         });
+//     }
+// });
+
+// // Get cart items route
+// app.get('/cart', async function(request, response) {
+//     try {
+//         const { userId } = request.query;
+//         const cart = await Cart.findOne({ userId }).populate('items.productId');
+
+//         if (!cart) {
+//             return response.status(200).json({
+//                 status: 'success',
+//                 message: 'No items in cart',
+//                 items: []
+//             });
+//         }
+
+//         response.status(200).json({
+//             status: 'success',
+//             message: 'Cart items fetched successfully',
+//             items: cart.items
+//         });
+//     } catch (error) {
+//         console.error('Error fetching cart items:', error);
+//         response.status(500).json({
+//             status: 'failure',
+//             message: 'Failed to fetch cart items',
+//             error: error.message
+//         });
+//     }
+// });
 app.post('/add-to-cart', async function(request, response) {
     try {
         const { userId, productId } = request.body;
 
+        if (!userId || !productId) {
+            return response.status(400).json({ error: 'User ID and Product ID are required' });
+        }
+
+        // Find the user's cart
         let cart = await Cart.findOne({ userId });
 
-        if (cart) {
-            // Cart exists for the user
-            const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
-
-            if (itemIndex > -1) {
-                // Product exists in the cart, update the quantity
-                cart.items[itemIndex].quantity += 1;
-            } else {
-                // Product does not exist in the cart, add new item
-                cart.items.push({ productId, quantity: 1 });
-            }
-        } else {
-            // No cart for the user, create a new cart
-            cart = new Cart({
-                userId,
-                items: [{ productId, quantity: 1 }]
-            });
-        }
-
-        await cart.save();
-        response.status(200).json({
-            status: 'success',
-            message: 'Item added to cart successfully',
-            cart
-        });
-    } catch (error) {
-        console.error('Error adding to cart:', error);
-        response.status(500).json({
-            status: 'failure',
-            message: 'Failed to add item to cart',
-            error: error.message
-        });
-    }
-});
-
-// Get cart items route
-app.get('/cart', async function(request, response) {
-    try {
-        const { userId } = request.query;
-        const cart = await Cart.findOne({ userId }).populate('items.productId');
-
         if (!cart) {
-            return response.status(200).json({
-                status: 'success',
-                message: 'No items in cart',
-                items: []
-            });
+            // If the cart doesn't exist, create a new one
+            cart = new Cart({ userId, items: [] });
         }
 
-        response.status(200).json({
-            status: 'success',
-            message: 'Cart items fetched successfully',
-            items: cart.items
-        });
+        // Check if the product is already in the cart
+        const cartItem = cart.items.find(item => item.productId.toString() === productId);
+
+        if (cartItem) {
+            // If the product is already in the cart, increase the quantity
+            cartItem.quantity += 1;
+        } else {
+            // If the product is not in the cart, add it
+            cart.items.push({ productId });
+        }
+
+        // Save the cart
+        await cart.save();
+
+        response.status(200).json({ message: 'Item added to cart successfully' });
     } catch (error) {
-        console.error('Error fetching cart items:', error);
-        response.status(500).json({
-            status: 'failure',
-            message: 'Failed to fetch cart items',
-            error: error.message
-        });
+        console.error('Error adding item to cart:', error);
+        response.status(500).json({ error: 'Internal server error' });
     }
 });
 
