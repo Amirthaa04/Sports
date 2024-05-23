@@ -144,6 +144,20 @@ app.delete('/cart/:id', async (req, res) => {
     }
 });
 
+// Assuming you have already defined your Cart model and imported necessary modules
+
+// Route to get the count of cart items
+app.get('/getcart/count', async (req, res) => {
+    const userId = req.user.id; // Assuming you have user information stored in req.user after authentication
+
+    try {
+        const itemCount = await Cart.countDocuments({ userId });
+        res.json({ count: itemCount });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 module.exports = app;
 
