@@ -116,6 +116,26 @@ app.get('/req-questions', async function(request, response) {
         });
     }
 });
+app.post('/cart', (req, res) => {
+    const { image, topic, description, price } = req.body;
+
+    const newCartItem = new Cart({ image, topic, description, price });
+
+    newCartItem.save()
+        .then(item => res.status(201).json(item))
+        .catch(err => res.status(500).json({ error: err.message }));
+});
+
+app.get('/getcart', async (req, res) => {
+    try {
+        const carts = await CartModel.find();
+        res.json(carts);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+module.exports = app;
 
 // Add new endpoint for retrieving cart items
 // app.get('/cart', async function(request, response) {
@@ -175,41 +195,40 @@ app.get('/req-questions', async function(request, response) {
 // });
 
 
-app.post('/add-to-cart', async function(request, response) {
-    try {
-        const { userId, productId } = request.body;
+// app.post('/add-to-cart', async function(request, response) {
+//     try {
+//         const { userId, productId } = request.body;
 
-        if (!userId || !productId) {
-            return response.status(400).json({ error: 'User ID and Product ID are required' });
-        }
+//         if (!userId || !productId) {
+//             return response.status(400).json({ error: 'User ID and Product ID are required' });
+//         }
 
-        // Find the user's cart
-        let cart = await Cart.findOne({ userId });
+//         // Find the user's cart
+//         let cart = await Cart.findOne({ userId });
 
-        if (!cart) {
-            // If the cart doesn't exist, create a new one
-            cart = new Cart({ userId, items: [] });
-        }
+//         if (!cart) {
+//             // If the cart doesn't exist, create a new one
+//             cart = new Cart({ userId, items: [] });
+//         }
 
-        // Check if the product is already in the cart
-        const cartItem = cart.items.find(item => item.productId.toString() === productId);
+//         // Check if the product is already in the cart
+//         const cartItem = cart.items.find(item => item.productId.toString() === productId);
 
-        if (cartItem) {
-            // If the product is already in the cart, increase the quantity
-            cartItem.quantity += 1;
-        } else {
-            // If the product is not in the cart, add it
-            cart.items.push({ productId });
-        }
+//         if (cartItem) {
+//             // If the product is already in the cart, increase the quantity
+//             cartItem.quantity += 1;
+//         } else {
+//             // If the product is not in the cart, add it
+//             cart.items.push({ productId });
+//         }
 
-        // Save the cart
-        await cart.save();
+//         // Save the cart
+//         await cart.save();
 
-        response.status(200).json({ message: 'Item added to cart successfully' });
-    } catch (error) {
-        console.error('Error adding item to cart:', error);
-        response.status(500).json({ error: 'Internal server error' });
-    }
-});
+//         response.status(200).json({ message: 'Item added to cart successfully' });
+//     } catch (error) {
+//         console.error('Error adding item to cart:', error);
+//         response.status(500).json({ error: 'Internal server error' });
+//     }
+// });
 
-module.exports = app;
