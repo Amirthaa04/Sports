@@ -134,6 +134,16 @@ app.get('/getcart', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+app.delete('/cart/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        await Cart.findByIdAndDelete(id);
+        res.status(200).json({ message: 'Item deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 module.exports = app;
 
