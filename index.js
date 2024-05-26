@@ -128,7 +128,7 @@ app.post('/cart', (req, res) => {
 
 app.get('/getcart', async (req, res) => {
     try {
-        const carts = await CartModel.find();
+        const carts = await Cart.find();
         res.json(carts);
     } catch (err) {
         res.status(500).json({ error: err.message });
