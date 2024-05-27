@@ -148,22 +148,23 @@ app.delete('/cart/:id', async (req, res) => {
 });
 
 // Update quantity of a cart item
-app.post('/cart/updatequantity', async (req, res) => {
+app.patch('/cart/:id', async (req, res) => {
     try {
-        const { username, itemId, quantity } = req.body;
+        const { id } = req.params;
+        const { quantity } = req.body; // Assuming you're sending the updated quantity in the request body
 
-        // Find the cart item by username and itemId and update its quantity
-        const cartItem = await Cart.findOneAndUpdate(
-            { username: username, _id: itemId },
-            { $set: { quantity: quantity } },
-            { new: true }
-        );
-
-        if (!cartItem) {
-            return res.status(404).json({ message: 'Item not found' });
+        // Validate if quantity is a positive integer
+        if (!Number.isInteger(quantity) || quantity <= 0) {
+            return res.status(400).json({ error: 'Quantity must be a positive integer' });
         }
 
-        res.status(200).json({ message: 'Quantity updated successfully', cartItem });
+        const updatedCartItem = await Cart.findByIdAndUpdate(id, { quantity }, { new: true });
+
+        if (!updatedCartItem) {
+            return res.status(404).json({ error: 'Item not found in the cart' });
+        }
+
+        res.status(200).json(updatedCartItem);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
