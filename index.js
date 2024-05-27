@@ -147,6 +147,29 @@ app.delete('/cart/:id', async (req, res) => {
     }
 });
 
+// Update quantity of a cart item
+app.post('/cart/updatequantity', async (req, res) => {
+    try {
+        const { username, itemId, quantity } = req.body;
+
+        // Find the cart item by username and itemId and update its quantity
+        const cartItem = await Cart.findOneAndUpdate(
+            { username: username, _id: itemId },
+            { $set: { quantity: quantity } },
+            { new: true }
+        );
+
+        if (!cartItem) {
+            return res.status(404).json({ message: 'Item not found' });
+        }
+
+        res.status(200).json({ message: 'Quantity updated successfully', cartItem });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
 // Assuming you have already defined your Cart model and imported necessary modules
 
 // Route to get the count of cart items
