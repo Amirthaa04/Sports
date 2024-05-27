@@ -127,34 +127,16 @@ app.post('/cart', (req, res) => {
         .catch(err => res.status(500).json({ error: err.message }));
 });
 
-// app.get('/getcart', async (req, res) => {
-
-//     try {
-//         const {username}=req.query;
-//         const carts = await Cart.find({username:username});
-//         res.json(carts);
-//     } catch (err) {
-//         res.status(500).json({ error: err.message });
-//     }
-// });
-
 app.get('/getcart', async (req, res) => {
-    try {
-        const { username } = req.query;
-        const carts = await Cart.find({ username });
-        
-        // Calculate total price
-        let totalPrice = 0;
-        carts.forEach(item => {
-            totalPrice += item.price * item.quantity;
-        });
 
-        res.json({ carts, totalPrice });
+    try {
+        const {username}=req.query;
+        const carts = await Cart.find({username:username});
+        res.json(carts);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
-
 app.delete('/cart/:id', async (req, res) => {
     try {
         const { id } = req.params;
