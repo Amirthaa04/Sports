@@ -128,8 +128,10 @@ app.post('/cart', (req, res) => {
 });
 
 app.get('/getcart', async (req, res) => {
+
     try {
-        const carts = await Cart.find();
+        const {username}=req.query;
+        const carts = await Cart.find({username:username});
         res.json(carts);
     } catch (err) {
         res.status(500).json({ error: err.message });
