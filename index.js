@@ -58,7 +58,7 @@ app.post('/login',async function(request,response){
             response.status(200).json({
                 "status":"success",
                 "message":"Valid user",
-                
+                name:user.username,
             })
         }
         else{
