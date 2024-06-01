@@ -120,7 +120,7 @@ app.post('/add-ques', async function(request, response) {
 
 app.get('/req-questions', async function(request, response) {
     try {
-        const { category, price, review } = request.query;
+        const { category, price } = request.query;
         let filter = { category };
 
         // Optional: Add filtering by price
@@ -135,12 +135,19 @@ app.get('/req-questions', async function(request, response) {
                 case '1000 to 2000':
                     filter.price = { $gte: 1000, $lt: 2000 };
                     break;
-                // Add more cases as needed
+                case '2000 to 3000':
+                    filter.price = { $gte: 2000, $lt: 3000 };
+                    break;
+                case '3000 to 4000':
+                    filter.price = { $gte: 3000, $lt: 4000 };
+                    break;
+                case '4000 to 5000':
+                    filter.price = { $gte: 4000, $lt: 5000 };
+                    break;
+                default:
+                    break;
             }
         }
-
-        // Optional: Add filtering by review ratings
-        // You can implement similar logic for filtering by review ratings
 
         const questions = await Sports.find(filter);
         response.status(200).json(questions);
@@ -153,6 +160,7 @@ app.get('/req-questions', async function(request, response) {
         });
     }
 });
+
 
 app.post('/cart', (req, res) => {
     const { username , image, topic, description, price } = req.body;
