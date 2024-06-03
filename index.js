@@ -103,52 +103,10 @@ app.post('/add-ques', async function(request, response) {
     }
 });
 
-// app.get('/req-questions', async function(request, response) {
-//     try {
-//         const { category } = request.query;
-//         const questions = await Sports.find({ category });
-//         response.status(200).json(questions);
-//     } catch (error) {
-//         console.error('Error fetching questions:', error);
-//         response.status(500).json({
-//             status: 'failure',
-//             message: 'Failed to fetch questions',
-//             error: error.message
-//         });
-//     }
-// });
 app.get('/req-questions', async function(request, response) {
     try {
-        const { category, price } = request.query;
-        let filter = { category };
-
-        // Optional: Add filtering by price
-        if (price) {
-            switch (price) {
-                case 'Under 500':
-                    filter.price = { $lt: 500 };
-                    break;
-                case '500 to 1000':
-                    filter.price = { $gte: 500, $lt: 1000 };
-                    break;
-                case '1000 to 2000':
-                    filter.price = { $gte: 1000, $lt: 2000 };
-                    break;
-                case '2000 to 3000':
-                    filter.price = { $gte: 2000, $lt: 3000 };
-                    break;
-                case '3000 to 4000':
-                    filter.price = { $gte: 3000, $lt: 4000 };
-                    break;
-                case '4000 to 5000':
-                    filter.price = { $gte: 4000, $lt: 5000 };
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        const questions = await Sports.find(filter);
+        const { category } = request.query;
+        const questions = await Sports.find({ category });
         response.status(200).json(questions);
     } catch (error) {
         console.error('Error fetching questions:', error);
@@ -159,6 +117,7 @@ app.get('/req-questions', async function(request, response) {
         });
     }
 });
+
 
 
 
