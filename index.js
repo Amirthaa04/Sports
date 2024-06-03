@@ -117,7 +117,6 @@ app.post('/add-ques', async function(request, response) {
 //         });
 //     }
 // });
-
 app.get('/req-questions', async function(request, response) {
     try {
         const { category, price } = request.query;
@@ -160,6 +159,7 @@ app.get('/req-questions', async function(request, response) {
         });
     }
 });
+
 
 
 app.post('/cart', (req, res) => {
