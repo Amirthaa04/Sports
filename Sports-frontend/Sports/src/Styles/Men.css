@@ -1,0 +1,33 @@
+.men ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.men li {
+  display: inline-block;
+  width: 23%; /* Adjust as needed to accommodate margins and borders */
+  margin: 1%;
+  box-sizing: border-box; /* Include padding and border in the width */
+  border: 2px solid #ccc; /* Add a border around each item */
+  padding: 10px; /* Adjust padding as needed */
+  /* text-align: center; */
+}
+
+.men img {
+  max-width: 100%; /* Ensure images don't exceed their parent's width */
+  height: auto; /* Maintain aspect ratio */
+}
+.men button {
+  display: block;
+  margin-top: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.men button:hover {
+  background-color: #0056b3;
+}

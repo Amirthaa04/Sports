@@ -1,0 +1,29 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+
+}
+.related-items-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.related-item {
+  text-align: center;
+}
+
+.related-item-image {
+  width: 50%;
+  max-width: 300px;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.related-item-image:hover {
+  transform: scale(1.05);
+}
